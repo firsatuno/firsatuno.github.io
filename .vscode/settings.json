@@ -3,5 +3,11 @@
         "editor.cursorSurroundingLines": 0,
         "editor.tabSize": 4,
         "editor.wrappingIndent": "same"
+    },
+    "files.exclude": {
+        "**/*.rpyc": true,
+        "**/*.rpa": true,
+        "**/*.rpymc": true,
+        "**/cache/": true
     }
 }
