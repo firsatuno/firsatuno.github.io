@@ -136,4 +136,52 @@ $(document).ready(function() {
         // Implement your logic to mark the checklist item as uncompleted
         console.log(`Checklist item ${checklistItemId} uncompleted.`);
     }
+    function fetchHabiticaData(){
+        const userId = $('#user-id').val(); // Get User ID from input
+        const apiToken = $('#api-token').val(); // Get API Token from input
+
+        fetchUserInfo(userId, apiToken); // Fetch user info
+        fetchTasks(userId, apiToken); // Fetch tasks with provided credentials
+    }
+    function createTask(taskData) {
+        const userId = $('#user-id').val(); // Get User ID from input
+        const apiToken = $('#api-token').val(); // Get API Token from input
+        $.ajax({
+            url: 'https://habitica.com/api/v3/tasks/user',
+            headers: {
+                'x-api-user': userId,
+                'x-api-key': apiToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            data: JSON.stringify(taskData),
+            success: function(response) {
+                console.log('Task created successfully:', response);
+                fetchHabiticaData(); // Refresh the task list
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error creating task:', textStatus, errorThrown);
+            }
+        });
+    }
+
+    function addNewTodo() {
+        const newTodoText = $('#newTodoInput').val().trim();
+        if (newTodoText) {
+            createTask({
+                text: newTodoText,
+                type: 'todo',
+                checklist: []
+            });
+            $('#newTodoInput').val(''); // Clear input field
+        }
+    }
+
+    $('#addTodoButton').click(addNewTodo);
+
+    $('#newTodoInput').keypress(function(e) {
+        if (e.which === 13) { // Enter key
+            addNewTodo();
+        }
+    });
 });
